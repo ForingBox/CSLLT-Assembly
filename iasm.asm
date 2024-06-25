@@ -5,14 +5,18 @@
     lowStockMsg1 db 10, 13, '*** ALERT: Biscuit stock is low! ***', 10, 13, '$'
     lowStockMsg2 db 10, 13, '*** ALERT: Milk stock is low! ***', 10, 13, '$'
     lowStockMsg3 db 10, 13, '*** ALERT: Candy stock is low! ***', 10, 13, '$'
+    lowStockMsg4 db 10, 13, '*** ALERT: Keyboard stock is low! ***', 10, 13, '$'
+
 
     itemNum1 db 10,13, '1. Biscuit              ', 9, '$', 10
     itemNum2 db 10,13, '2. Milk                 ' , 9, '$', 10
     itemNum3 db 10,13, '3. Candy                ', 9, '$', 10
+    itemNum4 db 10,13, '4. Keyboard             ', 9, '$', 10
 
     itemN1Stock db 8     ; Stock for Biscuit
     itemN2Stock db 6     ; Stock for Milk
     itemN3Stock db 9     ; Stock for Candy    
+    itemN4Stock db 3     ; Stock for keyboard
 
     mainMenu db 10,13, '=================================', 10,13
              db '   Inventory System Main Menu', 10,13
@@ -40,19 +44,19 @@
                  db '   Item                     Quantity', 10,13, '$'
 
     orderMenu db 10,13,'====================================', 10,13
-                 db    'Select item (1-3)',10,13
-                 db '4. Back',10,13, '$'
+                 db    'Select item (1-4)',10,13
+                 db '5. Back',10,13, '$'
                
 
     addStockmsg db 10,13,'====================================', 10,13
-                db 'Select the item you want to restock (1 - 3)',10,13
-                db '4. Back',10,13,'$'
+                db 'Select the item you want to restock (1 - 4)',10,13
+                db '5. Back',10,13,'$'
     
     decStockmsg db 10,13,'====================================', 10,13 
-                db  'Select the item you want to reduce (1 - 3)',10,13
-                db  '4. Back',10,13,'$'
+                db  'Select the item you want to reduce (1 - 4)',10,13
+                db  '5. Back',10,13,'$'
     
-    orderMsg db 10,13, 'Select the item you want place order (1 - 3)',10,13,'$'
+    orderMsg db 10,13, 'Select the item you want place order (1 - 4)',10,13,'$'
     
     choiceInput db 10,13, 'Enter your choice (1 - 3): $'
     
@@ -167,6 +171,9 @@ createOrder:
     je orderItem3
 
     cmp al, '4'
+    je orderItem4
+
+    cmp al, '5'
     je menu
 
     ShowMessage invalidInput
@@ -190,6 +197,11 @@ orderItem3:
     ShowMessage orderCreatedMsg
     jmp createOrder
 
+orderItem4:
+    orderStock itemN4Stock
+    ShowMessage orderCreatedMsg
+    jmp createOrder
+
 outOfStock:
     ShowMessage noStockMsg
     jmp createOrder
@@ -208,7 +220,7 @@ checkInventory:
     je incStockMenu
     
     cmp al, '2'
-    je decStockMenu
+    je jmpInDecMenu
 
     cmp al, '3'
     je jmpInmenu2
@@ -233,10 +245,16 @@ incStockMenu:
     je addItem3
 
     cmp al, '4'
+    je addItem4    
+
+    cmp al, '5'
     je checkInventory
 
     ShowMessage invalidInput
     jmp incStockMenu
+
+jmpInDecMenu:
+    jmp decStockMenu
 
 addItem1:
     increStock itemN1Stock
@@ -248,6 +266,10 @@ addItem2:
 
 addItem3:
     increStock itemN3Stock
+    jmp incStockMenu
+
+addItem4:
+    increStock itemN4Stock
     jmp incStockMenu
 
 fullStock:
@@ -273,6 +295,9 @@ decStockMenu:
     je reduceItem3
 
     cmp al, '4'
+    je reduceItem4
+
+    cmp al, '5'
     je jmpInmenu
 
     ShowMessage invalidInput
@@ -288,6 +313,10 @@ reduceItem2:
 
 reduceItem3:
     decStock itemN3Stock
+    jmp decStockMenu
+
+reduceItem4:
+    decStock itemN4Stock
     jmp decStockMenu
 
 noStock:
@@ -328,9 +357,14 @@ nextItem2:
     ShowMessage lowStockMsg3
 nextItem3:
 
+    ; Display Item 4
+    ShowMessage itemNum4
+    ShowDigit itemN4Stock
+    cmp itemN4Stock, 3
+    jg nextItem4
+    ShowMessage lowStockMsg4
+nextItem4:
+
     ret
 displayItem ENDP
-
-
-
 END MAIN
