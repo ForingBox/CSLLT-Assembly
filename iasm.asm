@@ -66,6 +66,8 @@
 
     fullStockMsg db 10,13, 'Stock cannot be increased. Item is in maximum stock.', 10,13, '$'
 
+    noStockOrderMsg db 10,13, 'Stock cannot be order. Item is out of stock.', 10,13, '$'
+
     orderCreatedMsg db 10,13, 'WE RICH THE ORDER HAS BEEN MADE.', 10,13,'$'
 
 
@@ -203,7 +205,7 @@ orderItem4:
     jmp createOrder
 
 outOfStock:
-    ShowMessage noStockMsg
+    ShowMessage noStockOrderMsg
     jmp createOrder
     
 jmpInmenu2:
