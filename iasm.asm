@@ -2,6 +2,10 @@
 .stack 100h
 .data
 
+    lowStockMsg1 db 10, 13, '*** ALERT: Biscuit stock is low! ***', 10, 13, '$'
+    lowStockMsg2 db 10, 13, '*** ALERT: Milk stock is low! ***', 10, 13, '$'
+    lowStockMsg3 db 10, 13, '*** ALERT: Candy stock is low! ***', 10, 13, '$'
+
     itemNum1 db 10,13, '1. Biscuit              ', 9, '$', 10
     itemNum2 db 10,13, '2. Milk                 ' , 9, '$', 10
     itemNum3 db 10,13, '3. Candy                ', 9, '$', 10
@@ -297,15 +301,36 @@ closeProgram:
 MAIN ENDP
 
 displayItem PROC
-	mov ax,@data
-	mov ds,ax
-	ShowMessage itemNum1
-	ShowDigit itemN1Stock
-	ShowMessage itemNum2
-	ShowDigit itemN2Stock
-	ShowMessage itemNum3
-	ShowDigit itemN3Stock
-	ret
+    mov ax, @data
+    mov ds, ax
+
+    ; Display Item 1
+    ShowMessage itemNum1
+    ShowDigit itemN1Stock
+    cmp itemN1Stock, 3
+    jg nextItem1
+    ShowMessage lowStockMsg1
+nextItem1:
+
+    ; Display Item 2
+    ShowMessage itemNum2
+    ShowDigit itemN2Stock
+    cmp itemN2Stock, 3
+    jg nextItem2
+    ShowMessage lowStockMsg2
+nextItem2:
+
+    ; Display Item 3
+    ShowMessage itemNum3
+    ShowDigit itemN3Stock
+    cmp itemN3Stock, 3
+    jg nextItem3
+    ShowMessage lowStockMsg3
+nextItem3:
+
+    ret
 displayItem ENDP
+
+
 
 END MAIN
