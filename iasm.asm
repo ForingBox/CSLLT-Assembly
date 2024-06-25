@@ -2,9 +2,9 @@
 .stack 100h
 .data
 
-    itemNum1 db 10,13, '1. Biscuit', 10,'$'
-    itemNum2 db 10,13, '2. Milk', 10,'$'
-    itemNum3 db 10,13, '3. Candy', 10,'$'
+    itemNum1 db 10,13, '1. Biscuit              ', 9, '$', 10
+    itemNum2 db 10,13, '2. Milk                 ' , 9, '$', 10
+    itemNum3 db 10,13, '3. Candy                ', 9, '$', 10
 
     itemN1Stock db 8     ; Stock for Biscuit
     itemN2Stock db 6     ; Stock for Milk
