@@ -2,21 +2,24 @@
 .stack 100h
 .data
 
-    lowStockMsg1 db 10, 13, '*** ALERT: Biscuit stock is low! ***', 10, 13, '$'
-    lowStockMsg2 db 10, 13, '*** ALERT: Milk stock is low! ***', 10, 13, '$'
-    lowStockMsg3 db 10, 13, '*** ALERT: Candy stock is low! ***', 10, 13, '$'
-    lowStockMsg4 db 10, 13, '*** ALERT: Keyboard stock is low! ***', 10, 13, '$'
+    lowStockMsg1 db 10, 13, '*** ALERT: Biscuit stock is low! ***',  '$'
+    lowStockMsg2 db 10, 13, '*** ALERT: Milk stock is low! ***',  '$'
+    lowStockMsg3 db 10, 13, '*** ALERT: Candy stock is low! ***',  '$'
+    lowStockMsg4 db 10, 13, '*** ALERT: Keyboard stock is low! ***',  '$'
+    lowStockMsg5 db 10, 13, '*** ALERT: Microphone stock is low! ***', '$'
 
 
     itemNum1 db 10,13, '1. Biscuit              ', 9, '$', 10
     itemNum2 db 10,13, '2. Milk                 ' , 9, '$', 10
     itemNum3 db 10,13, '3. Candy                ', 9, '$', 10
     itemNum4 db 10,13, '4. Keyboard             ', 9, '$', 10
+    itemNum5 db 10,13, '5. Microphone           ', 9, '$', 10
 
     itemN1Stock db 8     ; Stock for Biscuit
     itemN2Stock db 6     ; Stock for Milk
     itemN3Stock db 9     ; Stock for Candy    
-    itemN4Stock db 3     ; Stock for keyboard
+    itemN4Stock db 5     ; Stock for keyboard
+    itemN5Stock db 3     ; Stock for Microphone
 
     mainMenu db 10,13, '=================================', 10,13
              db '   Inventory System Main Menu', 10,13
@@ -44,19 +47,19 @@
                  db '   Item                     Quantity', 10,13, '$'
 
     orderMenu db 10,13,'====================================', 10,13
-                 db    'Select item (1-4)',10,13
-                 db '5. Back',10,13, '$'
+                 db    'Select item (1-5)',10,13
+                 db '6. Back',10,13, '$'
                
 
     addStockmsg db 10,13,'====================================', 10,13
-                db 'Select the item you want to restock (1 - 4)',10,13
-                db '5. Back',10,13,'$'
+                db 'Select the item you want to restock (1 - 5)',10,13
+                db '6. Back',10,13,'$'
     
     decStockmsg db 10,13,'====================================', 10,13 
-                db  'Select the item you want to reduce (1 - 4)',10,13
-                db  '5. Back',10,13,'$'
+                db  'Select the item you want to reduce (1 - 5)',10,13
+                db  '6. Back',10,13,'$'
     
-    orderMsg db 10,13, 'Select the item you want place order (1 - 4)',10,13,'$'
+    orderMsg db 10,13, 'Select the item you want place order (1 - 5)',10,13,'$'
     
     choiceInput db 10,13, 'Enter your choice (1 - 3): $'
     
@@ -193,6 +196,9 @@ createOrder:
     je orderItem4
 
     cmp al, '5'
+    je orderItem5
+
+    cmp al, '6'
     je menu
 
     ShowMessage invalidInput
@@ -221,6 +227,11 @@ orderItem4:
     ShowMessage orderCreatedMsg
     jmp createOrder
 
+orderItem5:
+    orderStock itemN5Stock
+    ShowMessage orderCreatedMsg
+    jmp createOrder
+
 outOfStock:
     cmp al, 0
     je OrderOutOfStock
@@ -229,7 +240,7 @@ outOfStock:
     jmp createOrder
 
 OrderOutOfStock:
-    ShowMessage noStockDecMsg
+    ShowMessage noStockOrderMsg
     jmp createOrder
 
 OrderLowStock:
@@ -278,6 +289,9 @@ incStockMenu:
     je addItem4    
 
     cmp al, '5'
+    je addItem5
+
+    cmp al, '6'
     je checkInventory
 
     ShowMessage invalidInput
@@ -300,6 +314,10 @@ addItem3:
 
 addItem4:
     increStock itemN4Stock
+    jmp incStockMenu
+
+addItem5:
+    increStock itemN5Stock
     jmp incStockMenu
 
 fullStock:
@@ -328,6 +346,9 @@ decStockMenu:
     je reduceItem4
 
     cmp al, '5'
+    je reduceItem5
+
+    cmp al, '6'
     je jmpInmenu
 
     ShowMessage invalidInput
@@ -347,6 +368,10 @@ reduceItem3:
 
 reduceItem4:
     decStock itemN4Stock
+    jmp decStockMenu
+
+reduceItem5:
+    decStock itemN5Stock
     jmp decStockMenu
 
 noStock:
@@ -375,35 +400,69 @@ displayItem PROC
 
     ; Display Item 1
     ShowMessage itemNum1
+    cmp itemN1Stock, 3    
+    jle blinkItem1
     ShowDigit itemN1Stock
-    cmp itemN1Stock, 3
-    jg nextItem1
+    jmp nextItem1
+
+blinkItem1:
+    blink itemN1Stock
     ShowMessage lowStockMsg1
+    jmp nextItem1
 nextItem1:
 
     ; Display Item 2
     ShowMessage itemNum2
+    cmp itemN2Stock, 3    
+    jle blinkItem2
     ShowDigit itemN2Stock
-    cmp itemN2Stock, 3
-    jg nextItem2
+    jmp nextItem2
+
+blinkItem2:
+    blink itemN2Stock
     ShowMessage lowStockMsg2
+    jmp nextItem2
 nextItem2:
 
     ; Display Item 3
     ShowMessage itemNum3
+    cmp itemN3Stock, 3    
+    jle blinkItem3
     ShowDigit itemN3Stock
-    cmp itemN3Stock, 3
-    jg nextItem3
+    jmp nextItem3
+
+blinkItem3:
+    blink itemN3Stock
     ShowMessage lowStockMsg3
+    jmp nextItem3
+
 nextItem3:
 
     ; Display Item 4
     ShowMessage itemNum4
+    cmp itemN4Stock, 3    
+    jle blinkItem4
     ShowDigit itemN4Stock
-    cmp itemN4Stock, 3
-    jg nextItem4
+    jmp nextItem4
+
+blinkItem4:
+    blink itemN4Stock
     ShowMessage lowStockMsg4
+    jmp nextItem4
 nextItem4:
+
+    ; Display Item 5
+    ShowMessage itemNum5
+    cmp itemN5Stock, 3    
+    jle blinkItem5
+    ShowDigit itemN5Stock
+    jmp nextItem5
+
+blinkItem5:
+    blink itemN5Stock
+    ShowMessage lowStockMsg5
+    jmp nextItem5
+nextItem5:
 
     ret
 displayItem ENDP
