@@ -128,13 +128,28 @@ ShowDigit Macro db
 	int 21h
 EndM
 
-blinkRedText Macro 
-    mov ah, 09h
-    mov bl, 04h
-    or bl, 80h
-    mov cx, 1
-    int 100h
+blink MACRO db
+    mov ah, 09h  	; 09h to print string
+    mov bl, 04h  	; 04h for color attribute
+    or bl, 80h   	; set bl bit 7 to 1 (blink attribute)
+    mov cx, 2    	; set cx to 2 (number of characters to print)
+    int 10h			; interrupt 10h (video services)
 
+    mov al, db		; get value from variable db
+
+	aam				; ASCII adjust ax after multiply
+    add ax, 3030h	; convert al to ASCII
+
+	mov bl, 04h ; set color to red
+
+	; Split db into two registers
+    mov dh, al   	; dh --> carries lower nibble of AX(tens digit)
+    mov dl, ah	 	; dl --> carries upper nibble of AX(units digit)
+
+    mov ah, 2    	; 2 to print character
+    int 21h     	
+    mov dl, dh  	; move dh(lower digit) back to dl
+    int 21h     	
 EndM
 
 
