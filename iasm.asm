@@ -68,6 +68,8 @@
 
     noStockOrderMsg db 10,13, 'Stock cannot be order. Item is out of stock.', 10,13, '$'
 
+    noStockDecMsg db 10,13, 'Stock cannot be decreased. Item is out of stock.', 10,13, '$'
+
     orderCreatedMsg db 10,13, 'WE RICH THE ORDER HAS BEEN MADE.', 10,13,'$'
 
 
@@ -322,9 +324,19 @@ reduceItem4:
     jmp decStockMenu
 
 noStock:
-    ShowMessage noStockMsg
+    cmp al, 0
+    je DecOutOfStock
+    cmp al, 3
+    jle DecLowStock
     jmp decStockMenu
 
+DecOutOfStock:
+    ShowMessage noStockDecMsg
+    jmp decStockMenu
+
+DecLowStock:
+    ShowMessage noStockMsg
+    jmp decStockMenu
 
 closeProgram:
     mov ah, 4Ch
@@ -368,6 +380,5 @@ nextItem3:
 nextItem4:
 
     ret
-
 displayItem ENDP
 END MAIN
