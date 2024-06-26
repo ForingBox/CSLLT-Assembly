@@ -207,7 +207,18 @@ orderItem4:
     jmp createOrder
 
 outOfStock:
-    ShowMessage noStockOrderMsg
+    cmp al, 0
+    je OrderOutOfStock
+    cmp al, 3
+    jle OrderLowStock
+    jmp createOrder
+
+OrderOutOfStock:
+    ShowMessage noStockDecMsg
+    jmp createOrder
+
+OrderLowStock:
+    ShowMessage noStockMsg
     jmp createOrder
     
 jmpInmenu2:
