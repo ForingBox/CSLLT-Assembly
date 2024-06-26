@@ -368,5 +368,6 @@ nextItem3:
 nextItem4:
 
     ret
+
 displayItem ENDP
 END MAIN
