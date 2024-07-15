@@ -210,7 +210,6 @@ menu:
     jmp menu
     
 createOrder:
-    clearScreen
     ShowMessage orderList
     call displayItem
     ShowMessage orderMenu
