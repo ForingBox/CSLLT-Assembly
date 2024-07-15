@@ -222,7 +222,7 @@ createOrder:
     cmp al, '6'
     je menu
 
-    ShowMessage invalidInput
+    ShowMessage invalidItemInput
     jmp createOrder
 
 jmpInventory:
@@ -315,7 +315,7 @@ incStockMenu:
     cmp al, '6'
     je checkInventory
 
-    ShowMessage invalidInput
+    ShowMessage invalidItemInput
     jmp incStockMenu
 
 jmpInDecMenu:
@@ -372,7 +372,7 @@ decStockMenu:
     cmp al, '6'
     je jmpInmenu
 
-    ShowMessage invalidInput
+    ShowMessage invalidItemInput
     jmp decStockMenu
 
 reduceItem1:
