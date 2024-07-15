@@ -74,6 +74,9 @@
     ; Invalid input message
     invalidInput db 10,13, 'Invalid Input, choose between 1 - 3',10,13,'$'
 
+    ; Invalid input message for items
+    invalidItemInput db 10,13, 'Invalid Input, choose between 1 - 6',10,13,'$'
+
     ; No stock decrease message
     noStockMsg db 10,13, 'Stock cannot be decreased. Item is out of stock.', 10,13, '$'
 
