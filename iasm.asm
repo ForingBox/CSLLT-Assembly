@@ -114,6 +114,16 @@ decStock Macro val
     mov val, al
 EndM
 
+; Macro to clear screen
+clearScreen Macro
+    mov ah, 06h
+    mov al, 0       ; Number of lines to scroll up (0 means clear the whole screen)
+    mov bh, 07h     ; Attribute used for blank lines (default is gray on black)
+    mov cx, 0000h   ; Upper left corner of scroll area
+    mov dx, 184fh   ; Lower right corner of scroll area (25 lines, 80 columns)
+    int 10h
+EndM
+
 ; Macro to order stock
 orderStock Macro val
     mov al,val
@@ -195,11 +205,12 @@ menu:
 
     cmp al, '3'
     jmp closeProgram
-    
+
     ShowMessage invalidInput
     jmp menu
     
 createOrder:
+    clearScreen
     ShowMessage orderList
     call displayItem
     ShowMessage orderMenu
@@ -274,6 +285,7 @@ jmpInmenu2:
     jmp menu
 
 checkInventory:
+    clearScreen
     ShowMessage inventoryList
     call displayItem
     ShowMessage inventoryMenu
@@ -351,6 +363,7 @@ jmpInmenu:
     jmp checkInventory
 
 decStockMenu:
+    clearScreen
     ShowMessage inventoryList
     call displayItem
     ShowMessage decStockmsg
