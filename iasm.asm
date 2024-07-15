@@ -189,8 +189,10 @@ menu:
     
     cmp al, '1'
     je createOrder
+    
     cmp al, '2'
     je jmpInventory
+
     cmp al, '3'
     jmp closeProgram
     
