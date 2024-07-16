@@ -114,7 +114,6 @@ decStock Macro val
     mov val, al
 EndM
 
-
 ; Macro to order stock
 orderStock Macro val
     mov al,val
@@ -222,10 +221,10 @@ createOrder:
     je orderItem3
 
     cmp al, '4'
-    je jmpitem4
+    je orderItem4
 
     cmp al, '5'
-    je jmpitem5
+    je orderItem5
 
     cmp al, '6'
     je menu
@@ -235,12 +234,6 @@ createOrder:
 
 jmpInventory:
     jmp checkInventory
-
-jmpitem4:
-    jmp orderItem4
-
-jmpitem5:
-    jmp orderItem5
 
 orderItem1:
     orderStock itemN1Stock
@@ -257,13 +250,6 @@ orderItem3:
     ShowMessage orderCreatedMsg
     jmp createOrder
 
-outOfStock:
-    cmp al, 0
-    je OrderOutOfStock
-    cmp al, 3
-    jle OrderLowStock
-    jmp createOrder
-
 orderItem4:
     orderStock itemN4Stock
     ShowMessage orderCreatedMsg
@@ -273,6 +259,14 @@ orderItem5:
     orderStock itemN5Stock
     ShowMessage orderCreatedMsg
     jmp createOrder
+
+outOfStock:
+    cmp al, 0
+    je OrderOutOfStock
+    cmp al, 3
+    jle OrderLowStock
+    jmp createOrder
+
 
 OrderOutOfStock:
     ShowMessage noStockOrderMsg
@@ -304,9 +298,6 @@ checkInventory:
     ShowMessage invalidInput
     jmp checkInventory
 
-jmpInventory2:
-    jmp checkInventory
-
 incStockMenu:
     ShowMessage inventoryList
     call displayItem
@@ -329,7 +320,7 @@ incStockMenu:
     je addItem5
 
     cmp al, '6'
-    je jmpInventory2
+    je checkInventory
 
     ShowMessage invalidItemInput
     jmp incStockMenu
