@@ -209,6 +209,7 @@ menu:
     ShowMessage invalidInput
     jmp menu
 
+
 exitProgram:
     mov ah, 4Ch
     int 21h
@@ -230,12 +231,13 @@ createOrder:
     je orderItem3
 
     cmp al, '4'
-    je orderItem4
+    je jmpitem4
 
     cmp al, '5'
-    je orderItem5
+    je jmpitem5
 
     cmp al, '6'
+    clearScreen
     je menu
 
     ShowMessage invalidItemInput
@@ -244,28 +246,27 @@ createOrder:
 jmpInventory:
     jmp checkInventory
 
+jmpitem4:
+    jmp orderItem4
+
+jmpitem5:
+    jmp orderItem5
+
 orderItem1:
+    clearScreen
     orderStock itemN1Stock
     ShowMessage orderCreatedMsg
     jmp createOrder
 
 orderItem2:
+    clearScreen
     orderStock itemN2Stock
     ShowMessage orderCreatedMsg
     jmp createOrder
 
 orderItem3:
+    clearScreen
     orderStock itemN3Stock
-    ShowMessage orderCreatedMsg
-    jmp createOrder
-
-orderItem4:
-    orderStock itemN4Stock
-    ShowMessage orderCreatedMsg
-    jmp createOrder
-
-orderItem5:
-    orderStock itemN5Stock
     ShowMessage orderCreatedMsg
     jmp createOrder
 
@@ -275,6 +276,20 @@ outOfStock:
     cmp al, 3
     jle OrderLowStock
     jmp createOrder
+
+orderItem4:
+    clearScreen
+    orderStock itemN4Stock
+    ShowMessage orderCreatedMsg
+    jmp createOrder
+
+orderItem5:
+    clearScreen
+    orderStock itemN5Stock
+    ShowMessage orderCreatedMsg
+    jmp createOrder
+
+
 
 OrderOutOfStock:
     ShowMessage noStockOrderMsg
@@ -302,13 +317,17 @@ checkInventory:
     je jmpInDecMenu
 
     cmp al, '3'
+    clearScreen
     je jmpInmenu2
     
     ShowMessage invalidInput
     jmp checkInventory
-    
+
+jmpInventory2:
+    jmp checkInventory
 
 incStockMenu:
+    clearScreen
     ShowMessage inventoryList
     call displayItem
     ShowMessage addStockmsg
@@ -330,7 +349,7 @@ incStockMenu:
     je addItem5
 
     cmp al, '6'
-    je checkInventory
+    je jmpInventory2
 
     ShowMessage invalidItemInput
     jmp incStockMenu
