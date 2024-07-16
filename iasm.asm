@@ -204,11 +204,15 @@ menu:
     je jmpInventory
 
     cmp al, '3'
-    jmp closeProgram
+    je exitProgram
 
     ShowMessage invalidInput
     jmp menu
-    
+
+exitProgram:
+    mov ah, 4Ch
+    int 21h
+
 createOrder:
     ShowMessage orderList
     call displayItem
