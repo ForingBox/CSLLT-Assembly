@@ -19,7 +19,7 @@
     itemN1Stock db 8     ; Stock for Biscuit
     itemN2Stock db 6     ; Stock for Milk
     itemN3Stock db 9     ; Stock for Candy    
-    itemN4Stock db 5     ; Stock for Keyboard
+    itemN4Stock db 3     ; Stock for Keyboard
     itemN5Stock db 3     ; Stock for Microphone
 
     ; Main menu message
@@ -114,15 +114,6 @@ decStock Macro val
     mov val, al
 EndM
 
-; Macro to clear screen
-clearScreen Macro
-    mov ah, 06h
-    mov al, 0       ; Number of lines to scroll up (0 means clear the whole screen)
-    mov bh, 07h     ; Attribute used for blank lines (default is gray on black)
-    mov cx, 0000h   ; Upper left corner of scroll area
-    mov dx, 184fh   ; Lower right corner of scroll area (25 lines, 80 columns)
-    int 10h
-EndM
 
 ; Macro to order stock
 orderStock Macro val
@@ -237,7 +228,6 @@ createOrder:
     je jmpitem5
 
     cmp al, '6'
-    clearScreen
     je menu
 
     ShowMessage invalidItemInput
@@ -253,19 +243,16 @@ jmpitem5:
     jmp orderItem5
 
 orderItem1:
-    clearScreen
     orderStock itemN1Stock
     ShowMessage orderCreatedMsg
     jmp createOrder
 
 orderItem2:
-    clearScreen
     orderStock itemN2Stock
     ShowMessage orderCreatedMsg
     jmp createOrder
 
 orderItem3:
-    clearScreen
     orderStock itemN3Stock
     ShowMessage orderCreatedMsg
     jmp createOrder
@@ -278,18 +265,14 @@ outOfStock:
     jmp createOrder
 
 orderItem4:
-    clearScreen
     orderStock itemN4Stock
     ShowMessage orderCreatedMsg
     jmp createOrder
 
 orderItem5:
-    clearScreen
     orderStock itemN5Stock
     ShowMessage orderCreatedMsg
     jmp createOrder
-
-
 
 OrderOutOfStock:
     ShowMessage noStockOrderMsg
@@ -303,7 +286,6 @@ jmpInmenu2:
     jmp menu
 
 checkInventory:
-    clearScreen
     ShowMessage inventoryList
     call displayItem
     ShowMessage inventoryMenu
@@ -317,7 +299,6 @@ checkInventory:
     je jmpInDecMenu
 
     cmp al, '3'
-    clearScreen
     je jmpInmenu2
     
     ShowMessage invalidInput
@@ -327,7 +308,6 @@ jmpInventory2:
     jmp checkInventory
 
 incStockMenu:
-    clearScreen
     ShowMessage inventoryList
     call displayItem
     ShowMessage addStockmsg
@@ -385,7 +365,6 @@ jmpInmenu:
     jmp checkInventory
 
 decStockMenu:
-    clearScreen
     ShowMessage inventoryList
     call displayItem
     ShowMessage decStockmsg
