@@ -97,10 +97,10 @@
 
 ; Macro to scroll the screen up by a specified number of lines
 clearScreen Macro Mess
-ShowMessage clearScreenMsg
-ShowMessage clearScreenMsg
-ShowMessage clearScreenMsg
-ShowMessage clearScreenMsg
+    ShowMessage clearScreenMsg
+    ShowMessage clearScreenMsg
+    ShowMessage clearScreenMsg
+    ShowMessage clearScreenMsg
 
 EndM
 
