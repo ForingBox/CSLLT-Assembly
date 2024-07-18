@@ -77,9 +77,6 @@
     ; Invalid input message for items
     invalidItemInput db 10,13, 'Invalid Input, choose between 1 - 6',10,13,'$'
 
-    ; No stock decrease message
-    noStockMsg db 10,13, 'Stock cannot be decreased. Item is out of stock.', 10,13, '$'
-
     ; Full stock message
     fullStockMsg db 10,13, 'Stock cannot be increased. Item is in maximum stock.', 10,13, '$'
 
@@ -91,6 +88,21 @@
 
     ; Order created message
     orderCreatedMsg db 10,13, 'WE RICH THE ORDER HAS BEEN MADE.', 10,13,'$'
+
+
+    clearScreenMsg db 10,13, ' ', 10,13
+                    db ' ' ,10,13
+                    db ' ' ,10,13
+                    db ' ' ,10,13, '$'
+
+; Macro to scroll the screen up by a specified number of lines
+clearScreen Macro Mess
+ShowMessage clearScreenMsg
+ShowMessage clearScreenMsg
+ShowMessage clearScreenMsg
+ShowMessage clearScreenMsg
+
+EndM
 
 ; Macro to display a message
 ShowMessage Macro Mess
@@ -188,21 +200,34 @@ menu:
     GetInput
     
     cmp al, '1'
-    je createOrder
+    je MenuClear4Order
     
     cmp al, '2'
-    je jmpInventory
+    je jmpInventory2
 
     cmp al, '3'
     je exitProgram
 
+    jmp jmperrormenu
+
+jmperrormenu:
+    clearScreen
     ShowMessage invalidInput
     jmp menu
 
+MenuClear4Order:
+    clearScreen
+    jmp createOrder
 
 exitProgram:
     mov ah, 4Ch
     int 21h
+
+jmpInventory2:
+    jmp checkInventory
+
+jmpmenu:
+    jmp menu
 
 createOrder:
     ShowMessage orderList
@@ -221,13 +246,14 @@ createOrder:
     je orderItem3
 
     cmp al, '4'
-    je orderItem4
+    je jmpitem4
 
     cmp al, '5'
-    je orderItem5
+    je jmpitem5
 
     cmp al, '6'
-    je menu
+    clearScreen
+    je jmpmenu
 
     ShowMessage invalidItemInput
     jmp createOrder
@@ -237,49 +263,52 @@ jmpInventory:
 
 orderItem1:
     orderStock itemN1Stock
-    ShowMessage orderCreatedMsg
-    jmp createOrder
+    jmp salemade
 
 orderItem2:
     orderStock itemN2Stock
+    jmp salemade
+
+jmpitem4:
+    jmp orderItem4
+
+jmpitem5:
+    jmp orderItem5
+
+salemade:
+    clearScreen
     ShowMessage orderCreatedMsg
     jmp createOrder
 
 orderItem3:
     orderStock itemN3Stock
-    ShowMessage orderCreatedMsg
-    jmp createOrder
+    jmp salemade
 
 orderItem4:
     orderStock itemN4Stock
-    ShowMessage orderCreatedMsg
-    jmp createOrder
+    jmp salemade
+
 
 orderItem5:
     orderStock itemN5Stock
-    ShowMessage orderCreatedMsg
-    jmp createOrder
+    jmp salemade
+
 
 outOfStock:
     cmp al, 0
     je OrderOutOfStock
-    cmp al, 3
-    jle OrderLowStock
     jmp createOrder
 
-
 OrderOutOfStock:
+    clearScreen
     ShowMessage noStockOrderMsg
     jmp createOrder
 
-OrderLowStock:
-    ShowMessage noStockMsg
-    jmp createOrder
-    
 jmpInmenu2:
     jmp menu
 
 checkInventory:
+    clearScreen
     ShowMessage inventoryList
     call displayItem
     ShowMessage inventoryMenu
@@ -287,16 +316,28 @@ checkInventory:
     GetInput
     
     cmp al, '1'
-    je incStockMenu
+    je incMenuClear
     
     cmp al, '2'
-    je jmpInDecMenu
+    je jmpInDecMenu2
 
     cmp al, '3'
+    clearScreen
     je jmpInmenu2
     
     ShowMessage invalidInput
     jmp checkInventory
+
+jmpInventory3:
+    jmp checkInventory
+
+incMenuClear:
+    clearScreen
+    jmp incStockMenu
+
+jmpInDecMenu2:
+    clearScreen
+    jmp jmpInDecMenu
 
 incStockMenu:
     ShowMessage inventoryList
@@ -314,13 +355,13 @@ incStockMenu:
     je addItem3
 
     cmp al, '4'
-    je addItem4    
+    je jmpItemInc4    
 
     cmp al, '5'
-    je addItem5
+    je jmpItemInc5
 
     cmp al, '6'
-    je checkInventory
+    je jmpInventory3
 
     ShowMessage invalidItemInput
     jmp incStockMenu
@@ -330,26 +371,37 @@ jmpInDecMenu:
 
 addItem1:
     increStock itemN1Stock
+    clearScreen
     jmp incStockMenu
 
 addItem2:
     increStock itemN2Stock
+    clearScreen
     jmp incStockMenu
+
+jmpItemInc4:
+    jmp addItem4
+
+jmpItemInc5:
+    jmp addItem5
 
 addItem3:
     increStock itemN3Stock
     jmp incStockMenu
 
+fullStock:
+    clearScreen
+    ShowMessage fullStockMsg
+    jmp incStockMenu
+
 addItem4:
     increStock itemN4Stock
+    clearScreen
     jmp incStockMenu
 
 addItem5:
     increStock itemN5Stock
-    jmp incStockMenu
-
-fullStock:
-    ShowMessage fullStockMsg
+    clearScreen
     jmp incStockMenu
 
 jmpInmenu:
@@ -371,10 +423,10 @@ decStockMenu:
     je reduceItem3
 
     cmp al, '4'
-    je reduceItem4
+    je jmpItemDec4
 
     cmp al, '5'
-    je reduceItem5
+    je jmpItemDec5
 
     cmp al, '6'
     je jmpInmenu
@@ -384,37 +436,38 @@ decStockMenu:
 
 reduceItem1:
     decStock itemN1Stock
+    clearScreen
     jmp decStockMenu
 
 reduceItem2:
     decStock itemN2Stock
+    clearScreen
     jmp decStockMenu
+
+jmpItemDec4:
+    jmp reduceItem4
+
+jmpItemDec5:
+    jmp reduceItem5
 
 reduceItem3:
     decStock itemN3Stock
+    clearScreen
+    jmp decStockMenu
+
+noStock:
+    clearScreen
+    ShowMessage noStockDecMsg
     jmp decStockMenu
 
 reduceItem4:
     decStock itemN4Stock
+    clearScreen
     jmp decStockMenu
 
 reduceItem5:
     decStock itemN5Stock
-    jmp decStockMenu
-
-noStock:
-    cmp al, 0
-    je DecOutOfStock
-    cmp al, 3
-    jle DecLowStock
-    jmp decStockMenu
-
-DecOutOfStock:
-    ShowMessage noStockDecMsg
-    jmp decStockMenu
-
-DecLowStock:
-    ShowMessage noStockMsg
+    clearScreen
     jmp decStockMenu
 
 closeProgram:
@@ -437,8 +490,8 @@ blinkItem1:
     blink itemN1Stock
     ShowMessage lowStockMsg1
     jmp nextItem1
+    
 nextItem1:
-
     ; Display Item 2
     ShowMessage itemNum2
     cmp itemN2Stock, 3    
@@ -450,8 +503,8 @@ blinkItem2:
     blink itemN2Stock
     ShowMessage lowStockMsg2
     jmp nextItem2
-nextItem2:
 
+nextItem2:
     ; Display Item 3
     ShowMessage itemNum3
     cmp itemN3Stock, 3    
@@ -465,7 +518,6 @@ blinkItem3:
     jmp nextItem3
 
 nextItem3:
-
     ; Display Item 4
     ShowMessage itemNum4
     cmp itemN4Stock, 3    
