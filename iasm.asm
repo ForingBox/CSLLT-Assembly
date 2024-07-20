@@ -89,7 +89,7 @@
     ; Order created message
     orderCreatedMsg db 10,13, 'WE RICH THE ORDER HAS BEEN MADE.', 10,13,'$'
 
-
+    ; clear screen message
     clearScreenMsg db 10,13, ' ', 10,13
                     db ' ' ,10,13
                     db ' ' ,10,13
@@ -195,294 +195,294 @@ MAIN PROC
     mov ds, ax
     
 menu:
-    ShowMessage mainMenu
-    ShowMessage choiceInput
-    GetInput
+    ShowMessage mainMenu       ; Display main menu
+    ShowMessage choiceInput    ; Prompt user for input
+    GetInput                   ; Get user input
     
-    cmp al, '1'
-    je MenuClear4Order
+    cmp al, '1'                ; Check if input is '1'
+    je MenuClear4Order         ; Jump to create order menu if '1'
     
-    cmp al, '2'
-    je jmpInventory2
+    cmp al, '2'                ; Check if input is '2'
+    je jmpInventory2           ; Jump to inventory menu if '2'
 
-    cmp al, '3'
-    je exitProgram
+    cmp al, '3'                ; Check if input is '3'
+    je exitProgram             ; Exit program if '3'
 
-    jmp jmperrormenu
+    jmp jmperrormenu           ; Jump to error handling if input is invalid
 
 jmperrormenu:
-    clearScreen
-    ShowMessage invalidInput
-    jmp menu
+    clearScreen                ; Clear screen
+    ShowMessage invalidInput   ; Show invalid input message
+    jmp menu                   ; Jump back to main menu
 
 MenuClear4Order:
-    clearScreen
-    jmp createOrder
+    clearScreen                ; Clear screen
+    jmp createOrder            ; Jump to create order menu
 
 exitProgram:
-    mov ah, 4Ch
+    mov ah, 4Ch                ; Terminate program
     int 21h
 
 jmpInventory2:
-    jmp checkInventory
+    jmp checkInventory         ; Jump to check inventory
 
 jmpmenu:
-    jmp menu
+    jmp menu                   ; Jump back to main menu
 
 jmperrororder:
-    clearScreen
-    ShowMessage invalidItemInput
-    jmp createOrder
+    clearScreen                ; Clear screen
+    ShowMessage invalidItemInput ; Show invalid item input message
+    jmp createOrder            ; Jump back to create order menu
 
 createOrder:
-    ShowMessage orderList
-    call displayItem
-    ShowMessage orderMenu
-    ShowMessage orderMsg
-    GetInput
+    ShowMessage orderList      ; Display order list
+    call displayItem           ; Call procedure to display items
+    ShowMessage orderMenu      ; Display order menu
+    ShowMessage orderMsg       ; Prompt user to select item
+    GetInput                   ; Get user input
 
-    cmp al, '1'
-    je orderItem1
+    cmp al, '1'                ; Check if input is '1'
+    je orderItem1              ; Jump to order item 1 if '1'
 
-    cmp al, '2'
-    je orderItem2
+    cmp al, '2'                ; Check if input is '2'
+    je orderItem2              ; Jump to order item 2 if '2'
 
-    cmp al, '3'
-    je orderItem3
+    cmp al, '3'                ; Check if input is '3'
+    je orderItem3              ; Jump to order item 3 if '3'
 
-    cmp al, '4'
-    je jmpitem4
+    cmp al, '4'                ; Check if input is '4'
+    je jmpitem4                ; Jump to order item 4 if '4'
 
-    cmp al, '5'
-    je jmpitem5
+    cmp al, '5'                ; Check if input is '5'
+    je jmpitem5                ; Jump to order item 5 if '5'
 
-    cmp al, '6'
-    clearScreen
-    je jmpmenu
+    cmp al, '6'                ; Check if input is '6'
+    clearScreen                ; Clear screen
+    je jmpmenu                 ; Jump back to main menu if '6'
 
-    jmp jmperrororder
+    jmp jmperrororder          ; Jump to error handling if input is invalid
 
 jmpInventory:
-    jmp checkInventory
+    jmp checkInventory         ; Jump to check inventory
 
 orderItem1:
-    orderStock itemN1Stock
-    jmp salemade
+    orderStock itemN1Stock     ; Order stock for item 1
+    jmp salemade               ; Jump to sale made
 
 orderItem2:
-    orderStock itemN2Stock
-    jmp salemade
+    orderStock itemN2Stock     ; Order stock for item 2
+    jmp salemade               ; Jump to sale made
 
 jmpitem4:
-    jmp orderItem4
+    jmp orderItem4             ; Jump to order item 4
 
 jmpitem5:
-    jmp orderItem5
+    jmp orderItem5             ; Jump to order item 5
 
 salemade:
-    clearScreen
-    ShowMessage orderCreatedMsg
-    jmp createOrder
+    clearScreen                ; Clear screen
+    ShowMessage orderCreatedMsg ; Show order created message
+    jmp createOrder            ; Jump back to create order menu
 
 orderItem3:
-    orderStock itemN3Stock
-    jmp salemade
+    orderStock itemN3Stock     ; Order stock for item 3
+    jmp salemade               ; Jump to sale made
 
 orderItem4:
-    orderStock itemN4Stock
-    jmp salemade
-
+    orderStock itemN4Stock     ; Order stock for item 4
+    jmp salemade               ; Jump to sale made
 
 orderItem5:
-    orderStock itemN5Stock
-    jmp salemade
+    orderStock itemN5Stock     ; Order stock for item 5
+    jmp salemade               ; Jump to sale made
 
 outOfStock:
-    cmp al, 0
-    je OrderOutOfStock
-    jmp createOrder
+    cmp al, 0                  ; Check if stock is zero
+    je OrderOutOfStock         ; Jump to out of stock if zero
+    jmp createOrder            ; Jump back to create order menu
 
 OrderOutOfStock:
-    clearScreen
-    ShowMessage noStockOrderMsg
-    jmp createOrder
+    clearScreen                ; Clear screen
+    ShowMessage noStockOrderMsg ; Show no stock order message
+    jmp createOrder            ; Jump back to create order menu
 
 jmpInmenu2:
-    jmp menu
+    jmp menu                   ; Jump back to main menu
 
 checkInventory:
-    clearScreen
-    ShowMessage inventoryList
-    call displayItem
-    ShowMessage inventoryMenu
-    ShowMessage choiceInput
-    GetInput
+    clearScreen                ; Clear screen
+    ShowMessage inventoryList  ; Display inventory list
+    call displayItem           ; Call procedure to display items
+    ShowMessage inventoryMenu  ; Display inventory menu
+    ShowMessage choiceInput    ; Prompt user for input
+    GetInput                   ; Get user input
     
-    cmp al, '1'
-    je incMenuClear
+    cmp al, '1'                ; Check if input is '1'
+    je incMenuClear            ; Jump to increase stock menu if '1'
     
-    cmp al, '2'
-    je jmpInDecMenu2
+    cmp al, '2'                ; Check if input is '2'
+    je jmpInDecMenu2           ; Jump to decrease stock menu if '2'
 
-    cmp al, '3'
-    clearScreen
-    je jmpInmenu2
+    cmp al, '3'                ; Check if input is '3'
+    clearScreen                ; Clear screen
+    je jmpInmenu2              ; Jump back to main menu if '3'
     
-    ShowMessage invalidInput
-    jmp checkInventory
+    ShowMessage invalidInput   ; Show invalid input message
+    jmp checkInventory         ; Jump back to check inventory
 
 incMenuClear:
-    clearScreen
-    jmp incStockMenu
+    clearScreen                ; Clear screen
+    jmp incStockMenu           ; Jump to increase stock menu
 
 jmperrorInc:
-    clearScreen
-    ShowMessage invalidItemInput
-    jmp incStockMenu
+    clearScreen                ; Clear screen
+    ShowMessage invalidItemInput ; Show invalid item input message
+    jmp incStockMenu           ; Jump back to increase stock menu
 
 jmpInventory3:
-    jmp checkInventory
+    jmp checkInventory         ; Jump to check inventory
 
 jmpInDecMenu2:
-    clearScreen
-    jmp jmpInDecMenu
+    clearScreen                ; Clear screen
+    jmp jmpInDecMenu           ; Jump to decrease stock menu
 
 incStockMenu:
-    ShowMessage inventoryList
-    call displayItem
-    ShowMessage addStockmsg
-    GetInput
+    ShowMessage inventoryList  ; Display inventory list
+    call displayItem           ; Call procedure to display items
+    ShowMessage addStockmsg    ; Display add stock message
+    GetInput                   ; Get user input
 
-    cmp al, '1'
-    je addItem1
+    cmp al, '1'                ; Check if input is '1'
+    je addItem1                ; Jump to add item 1 if '1'
 
-    cmp al, '2'
-    je addItem2
+    cmp al, '2'                ; Check if input is '2'
+    je addItem2                ; Jump to add item 2 if '2'
 
-    cmp al, '3'
-    je addItem3
+    cmp al, '3'                ; Check if input is '3'
+    je addItem3                ; Jump to add item 3 if '3'
 
-    cmp al, '4'
-    je jmpItemInc4    
+    cmp al, '4'                ; Check if input is '4'
+    je jmpItemInc4             ; Jump to add item 4 if '4'
 
-    cmp al, '5'
-    je jmpItemInc5
+    cmp al, '5'                ; Check if input is '5'
+    je jmpItemInc5             ; Jump to add item 5 if '5'
 
-    cmp al, '6'
-    je jmpInventory3
+    cmp al, '6'                ; Check if input is '6'
+    je jmpInventory3           ; Jump back to check inventory if '6'
 
-    jmp jmperrorInc
+    jmp jmperrorInc            ; Jump to error handling if input is invalid
 
 jmpInDecMenu:
-    jmp decStockMenu
+    jmp decStockMenu           ; Jump to decrease stock menu
 
 addItem1:
-    increStock itemN1Stock
-    clearScreen
-    jmp incStockMenu
+    increStock itemN1Stock     ; Increase stock for item 1
+    clearScreen                ; Clear screen
+    jmp incStockMenu           ; Jump back to increase stock menu
 
 addItem2:
-    increStock itemN2Stock
-    clearScreen
-    jmp incStockMenu
+    increStock itemN2Stock     ; Increase stock for item 2
+    clearScreen                ; Clear screen
+    jmp incStockMenu           ; Jump back to increase stock menu
 
 jmpItemInc4:
-    jmp addItem4
+    jmp addItem4               ; Jump to add item 4
 
 jmpItemInc5:
-    jmp addItem5
+    jmp addItem5               ; Jump to add item 5
 
 addItem3:
-    increStock itemN3Stock
-    jmp incStockMenu
+    increStock itemN3Stock     ; Increase stock for item 3
+    clearScreen                ; Clear screen
+    jmp incStockMenu           ; Jump back to increase stock menu
 
 fullStock:
-    clearScreen
-    ShowMessage fullStockMsg
-    jmp incStockMenu
+    clearScreen                ; Clear screen
+    ShowMessage fullStockMsg   ; Show full stock message
+    jmp incStockMenu           ; Jump back to increase stock menu
 
 addItem4:
-    increStock itemN4Stock
-    clearScreen
-    jmp incStockMenu
+    increStock itemN4Stock     ; Increase stock for item 4
+    clearScreen                ; Clear screen
+    jmp incStockMenu           ; Jump back to increase stock menu
 
 addItem5:
-    increStock itemN5Stock
-    clearScreen
-    jmp incStockMenu
+    increStock itemN5Stock     ; Increase stock for item 5
+    clearScreen                ; Clear screen
+    jmp incStockMenu           ; Jump back to increase stock menu
 
 jmpErrorDec:
-    clearScreen
-    ShowMessage invalidItemInput
-    jmp decStockMenu
+    clearScreen                ; Clear screen
+    ShowMessage invalidItemInput ; Show invalid item input message
+    jmp decStockMenu           ; Jump back to decrease stock menu
 
 jmpInmenu:
-    jmp checkInventory
+    jmp checkInventory         ; Jump back to check inventory
 
 decStockMenu:
-    ShowMessage inventoryList
-    call displayItem
-    ShowMessage decStockmsg
-    GetInput
+    ShowMessage inventoryList  ; Display inventory list
+    call displayItem           ; Call procedure to display items
+    ShowMessage decStockmsg    ; Display decrease stock message
+    GetInput                   ; Get user input
 
-    cmp al, '1'
-    je reduceItem1
+    cmp al, '1'                ; Check if input is '1'
+    je reduceItem1             ; Jump to reduce item 1 if '1'
 
-    cmp al, '2'
-    je reduceItem2
+    cmp al, '2'                ; Check if input is '2'
+    je reduceItem2             ; Jump to reduce item 2 if '2'
 
-    cmp al, '3'
-    je reduceItem3
+    cmp al, '3'                ; Check if input is '3'
+    je reduceItem3             ; Jump to reduce item 3 if '3'
 
-    cmp al, '4'
-    je jmpItemDec4
+    cmp al, '4'                ; Check if input is '4'
+    je jmpItemDec4             ; Jump to reduce item 4 if '4'
 
-    cmp al, '5'
-    je jmpItemDec5
+    cmp al, '5'                ; Check if input is '5'
+    je jmpItemDec5             ; Jump to reduce item 5 if '5'
 
-    cmp al, '6'
-    je jmpInmenu
+    cmp al, '6'                ; Check if input is '6'
+    je jmpInmenu               ; Jump back to check inventory if '6'
 
-    jmp jmpErrorDec
+    jmp jmpErrorDec            ; Jump to error handling if input is invalid
 
 reduceItem1:
-    decStock itemN1Stock
-    clearScreen
-    jmp decStockMenu
+    decStock itemN1Stock       ; Decrease stock for item 1
+    clearScreen                ; Clear screen
+    jmp decStockMenu           ; Jump back to decrease stock menu
 
 reduceItem2:
-    decStock itemN2Stock
-    clearScreen
-    jmp decStockMenu
+    decStock itemN2Stock       ; Decrease stock for item 2
+    clearScreen                ; Clear screen
+    jmp decStockMenu           ; Jump back to decrease stock menu
 
 jmpItemDec4:
-    jmp reduceItem4
+    jmp reduceItem4            ; Jump to reduce item 4
 
 jmpItemDec5:
-    jmp reduceItem5
+    jmp reduceItem5            ; Jump to reduce item 5
 
 reduceItem3:
-    decStock itemN3Stock
-    clearScreen
-    jmp decStockMenu
+    decStock itemN3Stock       ; Decrease stock for item 3
+    clearScreen                ; Clear screen
+    jmp decStockMenu           ; Jump back to decrease stock menu
 
 noStock:
-    clearScreen
-    ShowMessage noStockDecMsg
-    jmp decStockMenu
+    clearScreen                ; Clear screen
+    ShowMessage noStockDecMsg  ; Show no stock decrease message
+    jmp decStockMenu           ; Jump back to decrease stock menu
 
 reduceItem4:
-    decStock itemN4Stock
-    clearScreen
-    jmp decStockMenu
+    decStock itemN4Stock       ; Decrease stock for item 4
+    clearScreen                ; Clear screen
+    jmp decStockMenu           ; Jump back to decrease stock menu
 
 reduceItem5:
-    decStock itemN5Stock
-    clearScreen
-    jmp decStockMenu
+    decStock itemN5Stock       ; Decrease stock for item 5
+    clearScreen                ; Clear screen
+    jmp decStockMenu           ; Jump back to decrease stock menu
 
 closeProgram:
-    mov ah, 4Ch
+    mov ah, 4Ch                ; Terminate program
     int 21h
 MAIN ENDP
 
@@ -491,68 +491,68 @@ displayItem PROC
     mov ds, ax
 
     ; Display Item 1
-    ShowMessage itemNum1
-    cmp itemN1Stock, 3    
-    jle blinkItem1
-    ShowDigit itemN1Stock
-    jmp nextItem1
+    ShowMessage itemNum1       ; Show item 1
+    cmp itemN1Stock, 3         ; Check if stock is 3 or less
+    jle blinkItem1             ; Jump to blink item if stock is low
+    ShowDigit itemN1Stock      ; Show stock digit
+    jmp nextItem1              ; Jump to next item
 
 blinkItem1:
-    blink itemN1Stock
-    ShowMessage lowStockMsg1
-    jmp nextItem1
+    blink itemN1Stock          ; Blink item stock
+    ShowMessage lowStockMsg1   ; Show low stock message
+    jmp nextItem1              ; Jump to next item
     
 nextItem1:
     ; Display Item 2
-    ShowMessage itemNum2
-    cmp itemN2Stock, 3    
-    jle blinkItem2
-    ShowDigit itemN2Stock
-    jmp nextItem2
+    ShowMessage itemNum2       ; Show item 2
+    cmp itemN2Stock, 3         ; Check if stock is 3 or less
+    jle blinkItem2             ; Jump to blink item if stock is low
+    ShowDigit itemN2Stock      ; Show stock digit
+    jmp nextItem2              ; Jump to next item
 
 blinkItem2:
-    blink itemN2Stock
-    ShowMessage lowStockMsg2
-    jmp nextItem2
+    blink itemN2Stock          ; Blink item stock
+    ShowMessage lowStockMsg2   ; Show low stock message
+    jmp nextItem2              ; Jump to next item
 
 nextItem2:
     ; Display Item 3
-    ShowMessage itemNum3
-    cmp itemN3Stock, 3    
-    jle blinkItem3
-    ShowDigit itemN3Stock
-    jmp nextItem3
+    ShowMessage itemNum3       ; Show item 3
+    cmp itemN3Stock, 3         ; Check if stock is 3 or less
+    jle blinkItem3             ; Jump to blink item if stock is low
+    ShowDigit itemN3Stock      ; Show stock digit
+    jmp nextItem3              ; Jump to next item
 
 blinkItem3:
-    blink itemN3Stock
-    ShowMessage lowStockMsg3
-    jmp nextItem3
+    blink itemN3Stock          ; Blink item stock
+    ShowMessage lowStockMsg3   ; Show low stock message
+    jmp nextItem3              ; Jump to next item
 
 nextItem3:
     ; Display Item 4
-    ShowMessage itemNum4
-    cmp itemN4Stock, 3    
-    jle blinkItem4
-    ShowDigit itemN4Stock
-    jmp nextItem4
+    ShowMessage itemNum4       ; Show item 4
+    cmp itemN4Stock, 3         ; Check if stock is 3 or less
+    jle blinkItem4             ; Jump to blink item if stock is low
+    ShowDigit itemN4Stock      ; Show stock digit
+    jmp nextItem4              ; Jump to next item
 
 blinkItem4:
-    blink itemN4Stock
-    ShowMessage lowStockMsg4
-    jmp nextItem4
+    blink itemN4Stock          ; Blink item stock
+    ShowMessage lowStockMsg4   ; Show low stock message
+    jmp nextItem4              ; Jump to next item
 nextItem4:
 
     ; Display Item 5
-    ShowMessage itemNum5
-    cmp itemN5Stock, 3    
-    jle blinkItem5
-    ShowDigit itemN5Stock
-    jmp nextItem5
+    ShowMessage itemNum5       ; Show item 5
+    cmp itemN5Stock, 3         ; Check if stock is 3 or less
+    jle blinkItem5             ; Jump to blink item if stock is low
+    ShowDigit itemN5Stock      ; Show stock digit
+    jmp nextItem5              ; Jump to next item
 
 blinkItem5:
-    blink itemN5Stock
-    ShowMessage lowStockMsg5
-    jmp nextItem5
+    blink itemN5Stock          ; Blink item stock
+    ShowMessage lowStockMsg5   ; Show low stock message
+    jmp nextItem5              ; Jump to next item
 nextItem5:
 
     ret
