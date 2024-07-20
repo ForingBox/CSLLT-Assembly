@@ -229,6 +229,11 @@ jmpInventory2:
 jmpmenu:
     jmp menu
 
+jmperrororder:
+    clearScreen
+    ShowMessage invalidItemInput
+    jmp createOrder
+
 createOrder:
     ShowMessage orderList
     call displayItem
@@ -255,8 +260,7 @@ createOrder:
     clearScreen
     je jmpmenu
 
-    ShowMessage invalidItemInput
-    jmp createOrder
+    jmp jmperrororder
 
 jmpInventory:
     jmp checkInventory
@@ -293,7 +297,6 @@ orderItem5:
     orderStock itemN5Stock
     jmp salemade
 
-
 outOfStock:
     cmp al, 0
     je OrderOutOfStock
@@ -328,12 +331,17 @@ checkInventory:
     ShowMessage invalidInput
     jmp checkInventory
 
-jmpInventory3:
-    jmp checkInventory
-
 incMenuClear:
     clearScreen
     jmp incStockMenu
+
+jmperrorInc:
+    clearScreen
+    ShowMessage invalidItemInput
+    jmp incStockMenu
+
+jmpInventory3:
+    jmp checkInventory
 
 jmpInDecMenu2:
     clearScreen
@@ -363,8 +371,7 @@ incStockMenu:
     cmp al, '6'
     je jmpInventory3
 
-    ShowMessage invalidItemInput
-    jmp incStockMenu
+    jmp jmperrorInc
 
 jmpInDecMenu:
     jmp decStockMenu
@@ -404,6 +411,11 @@ addItem5:
     clearScreen
     jmp incStockMenu
 
+jmpErrorDec:
+    clearScreen
+    ShowMessage invalidItemInput
+    jmp decStockMenu
+
 jmpInmenu:
     jmp checkInventory
 
@@ -431,8 +443,7 @@ decStockMenu:
     cmp al, '6'
     je jmpInmenu
 
-    ShowMessage invalidItemInput
-    jmp decStockMenu
+    jmp jmpErrorDec
 
 reduceItem1:
     decStock itemN1Stock
