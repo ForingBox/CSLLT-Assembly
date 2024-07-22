@@ -224,6 +224,7 @@ exitProgram:
     int 21h
 
 jmpInventory2:
+    clearScreen                ; Clear screen
     jmp checkInventory         ; Jump to check inventory
 
 jmpmenu:
@@ -310,7 +311,6 @@ jmpInmenu2:
     jmp menu                   ; Jump back to main menu
 
 checkInventory:
-    clearScreen                ; Clear screen
     ShowMessage inventoryList  ; Display inventory list
     call displayItem           ; Call procedure to display items
     ShowMessage inventoryMenu  ; Display inventory menu
@@ -334,17 +334,18 @@ incMenuClear:
     clearScreen                ; Clear screen
     jmp incStockMenu           ; Jump to increase stock menu
 
+jmpInDecMenu2:
+    clearScreen                ; Clear screen
+    jmp jmpInDecMenu           ; Jump to decrease stock menu
+
 jmperrorInc:
     clearScreen                ; Clear screen
     ShowMessage invalidItemInput ; Show invalid item input message
     jmp incStockMenu           ; Jump back to increase stock menu
 
 jmpInventory3:
-    jmp checkInventory         ; Jump to check inventory
-
-jmpInDecMenu2:
     clearScreen                ; Clear screen
-    jmp jmpInDecMenu           ; Jump to decrease stock menu
+    jmp checkInventory         ; Jump to check inventory
 
 incStockMenu:
     ShowMessage inventoryList  ; Display inventory list
@@ -417,6 +418,7 @@ jmpErrorDec:
     jmp decStockMenu           ; Jump back to decrease stock menu
 
 jmpInmenu:
+    clearScreen                ; Clear screen
     jmp checkInventory         ; Jump back to check inventory
 
 decStockMenu:
